@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador de Modelos 3D en AR</title>
+    <link rel="stylesheet" href="home-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                    <h1>AR Explorer</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#modelos">Modelos</a></li>
+                        <li><a href="#instrucciones">Instrucciones</a></li>
+                        <li><a href="ar-viewer.html" class="nav-button">Iniciar AR</a></li>
+                    </ul>
+                </nav>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="inicio" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Explora Modelos 3D en Realidad Aumentada</h1>
+                    <p>Descubre una experiencia interactiva con modelos 3D que cobran vida a través de tu cámara.</p>
+                    <a href="ar-viewer.html" class="cta-button">
+                        <i class="fas fa-vr-cardboard"></i>
+                        Iniciar Experiencia AR
+                    </a>
+                </div>
+                <div class="hero-image">
+                    <img src="images/ar-hero.png" alt="Realidad Aumentada" class="floating">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>Compatible con Móviles</h3>
+                    <p>Funciona en cualquier dispositivo móvil con cámara.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-cube"></i>
+                    <h3>Modelos 3D Detallados</h3>
+                    <p>Visualiza modelos 3D de alta calidad.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-volume-up"></i>
+                    <h3>Narración por Voz</h3>
+                    <p>Escucha la información sobre cada modelo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Models Section -->
+        <section id="modelos" class="models">
+            <div class="container">
+                <h2>Modelos Disponibles</h2>
+                <p class="section-description">Explora nuestra colección de modelos 3D interactivos y aprende sobre cada uno de ellos.</p>
+                
+                <div class="model-grid">
+                    <div class="model-card">
+                        <div class="model-image">
+                            <img src="images/phoenix.png" alt="Fénix">
+                        </div>
+                        <div class="model-info">
+                            <h3>El Fénix</h3>
+                            <p>Ave mítica que simboliza la inmortalidad y la resurrección.</p>
+                            <span class="model-tag">Mitología</span>
+                        </div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="model-image">
+                            <img src="images/lion.png" alt="León">
+                        </div>
+                        <div class="model-info">
+                            <h3>El León</h3>
+                            <p>Símbolo de fuerza, valentía y liderazgo en diversas culturas.</p>
+                            <span class="model-tag">Fauna</span>
+                        </div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="model-image">
+                            <img src="images/honesty.png" alt="Honestidad">
+                        </div>
+                        <div class="model-info">
+                            <h3>Honestidad</h3>
+                            <p>Valor institucional que da honor y decoro a las actividades realizadas.</p>
+                            <span class="model-tag">Valor</span>
+                        </div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="model-image">
+                            <img src="images/prudence.png" alt="Prudencia">
+                        </div>
+                        <div class="model-info">
+                            <h3>Prudencia</h3>
+                            <p>Valor del discernimiento sobre el bien y la forma para llevarlo a cabo.</p>
+                            <span class="model-tag">Valor</span>
+                        </div>
+                    </div>
+                    
+                    <div class="model-card">
+                        <div class="model-image">
+                            <img src="images/justice.png" alt="Justicia">
+                        </div>
+                        <div class="model-info">
+                            <h3>Justicia</h3>
+                            <p>La más excelsa de todas las virtudes, nos inclina a dar a cada quien lo que le corresponde.</p>
+                            <span class="model-tag">Valor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructions Section -->
+        <section id="instrucciones" class="instructions">
+            <div class="container">
+                <h2>Cómo Usar la Aplicación</h2>
+                <div class="instructions-grid">
+                    <div class="instruction-card">
+                        <div class="instruction-number">1</div>
+                        <h3>Imprime los Marcadores</h3>
+                        <p>Descarga e imprime los marcadores para cada modelo 3D.</p>
+                        <a href="markers/markers.pdf" class="download-link">Descargar Marcadores</a>
+                    </div>
+                    
+                    <div class="instruction-card">
+                        <div class="instruction-number">2</div>
+                        <h3>Inicia la Aplicación AR</h3>
+                        <p>Haz clic en el botón "Iniciar Experiencia AR" para abrir la cámara.</p>
+                    </div>
+                    
+                    <div class="instruction-card">
+                        <div class="instruction-number">3</div>
+                        <h3>Apunta a los Marcadores</h3>
+                        <p>Dirige la cámara hacia los marcadores impresos para ver los modelos 3D.</p>
+                    </div>
+                    
+                    <div class="instruction-card">
+                        <div class="instruction-number">4</div>
+                        <h3>Interactúa con los Modelos</h3>
+                        <p>Usa gestos para rotar, escalar y explorar los modelos 3D.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <h2>¿Listo para Comenzar?</h2>
+                <p>Inicia la experiencia de realidad aumentada ahora mismo.</p>
+                <a href="ar-viewer.html" class="cta-button pulse">
+                    <i class="fas fa-play"></i>
+                    Iniciar Experiencia AR
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        <i class="fas fa-cube"></i>
+                        <h3>AR Explorer</h3>
+                        <p>Una experiencia educativa en realidad aumentada.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Enlaces Rápidos</h4>
+                        <ul>
+                            <li><a href="#inicio">Inicio</a></li>
+                            <li><a href="#modelos">Modelos</a></li>
+                            <li><a href="#instrucciones">Instrucciones</a></li>
+                            <li><a href="ar-viewer.html">Iniciar AR</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-contact">
+                        <h4>Contacto</h4>
+                        <p><i class="fas fa-envelope"></i> info@arexplorer.edu</p>
+                        <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2023 AR Explorer. Todos los derechos reservados.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="home-script.js"></script>
+</body>
+</html>
+

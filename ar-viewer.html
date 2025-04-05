@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo 3D en AR</title>
+    <!-- Actualización a versiones más recientes de las bibliotecas -->
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container">
+        <!-- Botón de regreso a la página principal -->
+        <a href="index.html" id="back-button">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+        
+        <!-- Contenedor del modelo 3D -->
+        <div id="model-container">
+            <a-scene 
+                embedded 
+                arjs="sourceType: webcam; detectionMode: mono_and_matrix; debugUIEnabled: false; trackingMethod: best;"
+                vr-mode-ui="enabled: false" 
+                renderer="logarithmicDepthBuffer: true; alpha: true; precision: mediump; antialias: true;"
+                gesture-detector
+                loading-screen="dotsColor: white; backgroundColor: black"
+                device-orientation-permission-ui="enabled: false">
+                
+                <a-assets>
+                    <!-- Precarga de modelos 3D con timeout para mejorar rendimiento -->
+                    <a-asset-item id="bird" src="https://cdn.glitch.global/f24dfbcf-5d5a-489d-b6c0-b547e6c91644/asset.glb" response-type="arraybuffer" timeout="10000"></a-asset-item>
+                    <a-asset-item id="lion" src="https://cdn.glitch.global/f24dfbcf-5d5a-489d-b6c0-b547e6c91644/lion.glb" response-type="arraybuffer" timeout="10000"></a-asset-item>
+                    <a-asset-item id="honestidad" src="https://cdn.glitch.global/f24dfbcf-5d5a-489d-b6c0-b547e6c91644/Honestidad2.glb" response-type="arraybuffer" timeout="10000"></a-asset-item>
+                    <a-asset-item id="prudencia" src="https://cdn.glitch.global/f24dfbcf-5d5a-489d-b6c0-b547e6c91644/Prudencia.glb" response-type="arraybuffer" timeout="10000"></a-asset-item>
+                    <a-asset-item id="justicia" src="https://cdn.glitch.global/f24dfbcf-5d5a-489d-b6c0-b547e6c91644/Justicia.glb" response-type="arraybuffer" timeout="10000"></a-asset-item>
+                </a-assets>
+                
+                <!-- Marcador para el Fénix -->
+                <a-marker type="pattern" url="markers/pattern-Flecha.patt" id="marker-phoenix" emitevents="true" smooth="true" smoothCount="5" smoothTolerance="0.01">
+                    <a-entity 
+                        id="bird-model" 
+                        gltf-model="#bird" 
+                        scale="0.006 0.006 0.006"
+                        position="0 0 0" 
+                        animation-mixer="loop: repeat"
+                        class="clickable" 
+                        gesture-handler="minScale: 0.003; maxScale: 0.009"
+                        shadow="cast: true; receive: false">
+                    </a-entity>
+                </a-marker>
+                
+                <!-- Marcador para el León -->
+                <a-marker type="pattern" url="markers/pattern-A.patt" id="marker-lion" emitevents="true" smooth="true" smoothCount="5" smoothTolerance="0.01">
+                    <a-entity 
+                        id="lion-model" 
+                        gltf-model="#lion" 
+                        scale="0.006 0.006 0.006"
+                        position="0 0 0" 
+                        animation-mixer="loop: repeat"
+                        class="clickable" 
+                        gesture-handler="minScale: 0.003; maxScale: 0.009"
+                        shadow="cast: true; receive: false">
+                    </a-entity>
+                </a-marker>
+                
+                <!-- Marcador para Honestidad -->
+                <a-marker type="pattern" url="markers/pattern-H.patt" id="marker-honestidad" emitevents="true" smooth="true" smoothCount="5" smoothTolerance="0.01">
+                    <a-entity 
+                        id="honestidad-model" 
+                        gltf-model="#honestidad" 
+                        scale="1 1 1"
+                        position="0 0 0" 
+                        animation-mixer="loop: repeat"
+                        class="clickable" 
+                        gesture-handler="minScale: 0.5; maxScale: 1.5"
+                        shadow="cast: true; receive: false">
+                    </a-entity>
+                </a-marker>
+                
+                <!-- Marcador para Prudencia -->
+                <a-marker type="pattern" url="markers/pattern-P.patt" id="marker-prudencia" emitevents="true" smooth="true" smoothCount="5" smoothTolerance="0.01">
+                    <a-entity 
+                        id="prudencia-model" 
+                        gltf-model="#prudencia" 
+                        scale="1 1 1"
+                        position="0 0 0" 
+                        animation-mixer="loop: repeat"
+                        class="clickable" 
+                        gesture-handler="minScale: 0.5; maxScale: 1.5"
+                        shadow="cast: true; receive: false">
+                    </a-entity>
+                </a-marker>
+                
+                <!-- Marcador para Justicia -->
+                <a-marker type="pattern" url="markers/pattern-J.patt" id="marker-justicia" emitevents="true" smooth="true" smoothCount="5" smoothTolerance="0.01">
+                    <a-entity 
+                        id="justicia-model" 
+                        gltf-model="#justicia" 
+                        scale="1 1 1"
+                        position="0 0 0" 
+                        animation-mixer="loop: repeat"
+                        class="clickable" 
+                        gesture-handler="minScale: 0.5; maxScale: 1.5"
+                        shadow="cast: true; receive: false">
+                    </a-entity>
+                </a-marker>
+                
+                <!-- Cámara con límites de profundidad optimizados -->
+                <a-entity camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false"></a-entity>
+                
+                <!-- Indicador de carga -->
+                <a-entity id="loading-ui" position="0 0 -1" text="value: Cargando modelos...; color: white; align: center; width: 2" visible="false"></a-entity>
+            </a-scene>
+        </div>
+        
+        <!-- Contenedor del texto con mejor estructura -->
+        <div id="info-box">
+            <h2 id="title" aria-live="polite"></h2>
+            <p id="phoenix-text" aria-live="polite"></p>
+            <button id="speak-btn" class="speak-button" aria-label="Reproducir texto">
+                <span id="speak-icon">🔊</span> <span id="speak-text">Reproducir Texto</span>
+            </button>
+        </div>
+        
+        <!-- Indicador de estado -->
+        <div id="status-indicator">
+            <div id="camera-status">Buscando marcadores...</div>
+        </div>
+    </div>
+    
+    <!-- Enlace a Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,178 @@
+/* Estilos base y reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Contenedor principal: divide la pantalla en dos partes */
+#container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Parte superior: contiene el modelo 3D */
+#model-container {
+  flex: 1;
+  position: relative;
+  min-height: 60vh;
+}
+
+/* Parte inferior: contiene el texto */
+#info-box {
+  flex: 0 0 auto;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 15px;
+  max-height: 40vh;
+  overflow-y: auto;
+  font-size: 16px;
+  text-align: justify;
+  border-top: 2px solid white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+#info-box h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+#info-box h2,
+#info-box p {
+  max-width: 600px;
+  width: 90%;
+}
+
+#info-box p {
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+/* Botón de reproducción */
+.speak-button {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.speak-button:hover {
+  background-color: #45a049;
+}
+
+.speak-button:active {
+  transform: translateY(1px);
+}
+
+/* Indicador de estado */
+#status-indicator {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 12px;
+  z-index: 100;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+/* Botón de regreso */
+#back-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  z-index: 1000;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+#back-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  #info-box {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  #info-box h2 {
+    font-size: 1.1rem;
+  }
+
+  .speak-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Clase para ocultar elementos */
+.hidden {
+  display: none !important;
+}
+
+/* Mejora para accesibilidad - focus visible */
+button:focus {
+  outline: 2px solid #4caf50;
+  outline-offset: 2px;
+}
+
