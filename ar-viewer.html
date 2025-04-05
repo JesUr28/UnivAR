@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Modelo 3D en AR</title>
     <!-- Actualización a versiones más recientes de las bibliotecas -->
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
@@ -10,6 +10,8 @@
     <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
     <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
     <link rel="stylesheet" href="styles.css">
+    <!-- Enlace a Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div id="container">
@@ -18,11 +20,16 @@
             <i class="fas fa-arrow-left"></i> Volver
         </a>
         
+        <!-- Indicador de estado -->
+        <div id="status-indicator">
+            <div id="camera-status">Buscando marcadores...</div>
+        </div>
+        
         <!-- Contenedor del modelo 3D -->
         <div id="model-container">
             <a-scene 
                 embedded 
-                arjs="sourceType: webcam; detectionMode: mono_and_matrix; debugUIEnabled: false; trackingMethod: best;"
+                arjs="sourceType: webcam; detectionMode: mono_and_matrix; debugUIEnabled: false; trackingMethod: best; sourceWidth: 1280; sourceHeight: 960; displayWidth: 1280; displayHeight: 960;"
                 vr-mode-ui="enabled: false" 
                 renderer="logarithmicDepthBuffer: true; alpha: true; precision: mediump; antialias: true;"
                 gesture-detector
@@ -124,16 +131,11 @@
                 <span id="speak-icon">🔊</span> <span id="speak-text">Reproducir Texto</span>
             </button>
         </div>
-        
-        <!-- Indicador de estado -->
-        <div id="status-indicator">
-            <div id="camera-status">Buscando marcadores...</div>
-        </div>
     </div>
     
-    <!-- Enlace a Font Awesome para iconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="script.js"></script>
 </body>
 </html>
+
+
 
