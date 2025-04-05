@@ -12,6 +12,7 @@ const titleElement = document.getElementById("title")
 const statusIndicator = document.getElementById("camera-status")
 const loadingUI = document.getElementById("loading-ui")
 const infoBox = document.getElementById("info-box")
+const modelContainer = document.getElementById("model-container")
 
 // Datos de contenido
 const texts = {
@@ -139,6 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
   scene.addEventListener("loaded", () => {
     toggleLoading(false)
     console.log("Escena AR cargada correctamente")
+
+    // Asegurarse de que los elementos de la interfaz sean visibles
+    document.getElementById("back-button").style.display = "flex"
+    document.getElementById("status-indicator").style.display = "block"
   })
 
   // Evento de error de carga
@@ -146,7 +151,27 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Error al cargar la escena AR:", event)
     updateStatus("Error al cargar la escena")
   })
+
+  // Ajustar altura del contenedor de modelo según la orientación
+  adjustContainerHeights()
 })
+
+// Función para ajustar las alturas de los contenedores
+function adjustContainerHeights() {
+  const isLandscape = window.innerWidth > window.innerHeight
+
+  if (isLandscape) {
+    modelContainer.style.minHeight = "60%"
+    modelContainer.style.maxHeight = "70%"
+    infoBox.style.minHeight = "30%"
+    infoBox.style.maxHeight = "40%"
+  } else {
+    modelContainer.style.minHeight = "50%"
+    modelContainer.style.maxHeight = "60%"
+    infoBox.style.minHeight = "40%"
+    infoBox.style.maxHeight = "50%"
+  }
+}
 
 // Gestión de eventos de marcadores
 function setupMarkerEvents() {
@@ -193,6 +218,10 @@ document.addEventListener("keydown", (event) => {
 // Inicializar eventos de marcadores cuando la escena esté lista
 window.addEventListener("load", () => {
   setTimeout(setupMarkerEvents, 1000)
+
+  // Asegurarse de que los elementos de la interfaz sean visibles
+  document.getElementById("back-button").style.display = "flex"
+  document.getElementById("status-indicator").style.display = "block"
 })
 
 // Gestión de visibilidad de la página
@@ -220,6 +249,9 @@ function checkMobileDevice() {
     document.addEventListener("gesturestart", (e) => {
       e.preventDefault()
     })
+
+    // Ajustar tamaños para móviles
+    adjustContainerHeights()
   }
 }
 
@@ -230,12 +262,13 @@ window.addEventListener("orientationchange", () => {
   // Pequeña pausa para permitir que el navegador actualice las dimensiones
   setTimeout(() => {
     // Ajustar la altura del contenedor de información según la orientación
-    const vh = window.innerHeight * 0.01
-    document.documentElement.style.setProperty("--vh", `${vh}px`)
+    adjustContainerHeights()
   }, 100)
 })
+
+// También ajustar en cambio de tamaño de ventana
+window.addEventListener("resize", adjustContainerHeights)
 
 // Inicializar altura personalizada
 const vh = window.innerHeight * 0.01
 document.documentElement.style.setProperty("--vh", `${vh}px`)
-
