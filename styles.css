@@ -26,7 +26,7 @@ body {
 #container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   position: relative;
 }
@@ -35,8 +35,6 @@ body {
 #model-container {
   flex: 1;
   position: relative;
-  min-height: 60%;
-  max-height: 70%;
   overflow: hidden;
 }
 
@@ -52,47 +50,36 @@ a-scene {
 
 /* Parte inferior: contiene el texto */
 #info-box {
-  flex: 0 0 auto;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.8);
   color: white;
-  padding: 15px;
-  max-height: 40%;
-  min-height: 30%;
+  padding: 20px;
+  height: 40%;
   overflow-y: auto;
   font-size: 16px;
-  text-align: justify;
+  text-align: center;
   border-top: 2px solid white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
-  z-index: 10;
-  position: relative;
 }
 
 #info-box h2 {
   text-align: center;
   margin-bottom: 10px;
-  font-size: 1.3rem;
 }
 
-#info-box h2,
 #info-box p {
   max-width: 600px;
-  width: 90%;
-}
-
-#info-box p {
-  margin-bottom: 15px;
-  line-height: 1.5;
+  width: 100%;
+  margin: 0 auto;
+  text-align: justify;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* Botón de reproducción */
 .speak-button {
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin: 15px auto;
   padding: 10px 20px;
   background-color: #4caf50;
   color: white;
@@ -100,21 +87,11 @@ a-scene {
   cursor: pointer;
   border-radius: 5px;
   font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 20;
+  display: block;
 }
 
 .speak-button:hover {
   background-color: #45a049;
-}
-
-.speak-button:active {
-  transform: translateY(1px);
 }
 
 /* Indicador de estado */
@@ -128,8 +105,6 @@ a-scene {
   border-radius: 20px;
   font-size: 14px;
   z-index: 100;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
 }
 
 /* Botón de regreso */
@@ -147,47 +122,21 @@ a-scene {
   display: flex;
   align-items: center;
   gap: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
 }
 
 #back-button:hover {
   background-color: #45a049;
-  transform: translateY(-2px);
 }
 
 /* Estilos para dispositivos móviles */
 @media (max-width: 768px) {
-  #model-container {
-    min-height: 50%;
-    max-height: 60%;
-  }
-
   #info-box {
-    min-height: 40%;
-    padding: 12px;
+    padding: 15px;
     font-size: 14px;
-  }
-
-  #info-box h2 {
-    font-size: 1.1rem;
-    margin-top: 5px;
   }
 
   .speak-button {
     padding: 8px 16px;
-    font-size: 14px;
-    margin-top: 5px;
-  }
-
-  #status-indicator {
-    top: 60px;
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-
-  #back-button {
-    padding: 6px 12px;
     font-size: 14px;
   }
 }
@@ -205,16 +154,4 @@ a-scene {
 .fade-in {
   animation: fadeIn 0.5s ease forwards;
 }
-
-/* Clase para ocultar elementos */
-.hidden {
-  display: none !important;
-}
-
-/* Mejora para accesibilidad - focus visible */
-button:focus {
-  outline: 2px solid #4caf50;
-  outline-offset: 2px;
-}
-
 
