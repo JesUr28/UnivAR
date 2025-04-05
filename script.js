@@ -1,10 +1,18 @@
 // Configuración inicial y variables
 const synth = window.speechSynthesis
 let isSpeaking = false
+let currentMarker = null
+let isLoading = true
+let markerVisible = false
+
+// Elementos del DOM
 const speakBtn = document.getElementById("speak-btn")
 const textElement = document.getElementById("phoenix-text")
 const titleElement = document.getElementById("title")
 const statusIndicator = document.getElementById("camera-status")
+const loadingUI = document.getElementById("loading-ui")
+const infoBox = document.getElementById("info-box")
+const modelContainer = document.getElementById("model-container")
 
 // Datos de contenido
 const texts = {
@@ -35,133 +43,235 @@ const texts = {
   },
 }
 
-// Detectar cuándo un marcador es visible
-document.querySelector("#marker-phoenix").addEventListener("markerFound", () => {
-  titleElement.innerText = texts.phoenix.title
-  textElement.innerText = texts.phoenix.content
-  statusIndicator.textContent = "Marcador detectado: " + texts.phoenix.title
-  document.querySelector("#bird-model").setAttribute("scale", "0.006 0.006 0.006")
-})
+// Función para actualizar el estado de la aplicación
+function updateStatus(message) {
+  statusIndicator.textContent = message
+}
 
-document.querySelector("#marker-lion").addEventListener("markerFound", () => {
-  titleElement.innerText = texts.lion.title
-  textElement.innerText = texts.lion.content
-  statusIndicator.textContent = "Marcador detectado: " + texts.lion.title
-  document.querySelector("#lion-model").setAttribute("scale", "0.006 0.006 0.006")
-})
+// Función para mostrar/ocultar la interfaz de carga
+function toggleLoading(show) {
+  loadingUI.setAttribute("visible", show)
+  isLoading = show
 
-document.querySelector("#marker-honestidad").addEventListener("markerFound", () => {
-  titleElement.innerText = texts.honestidad.title
-  textElement.innerText = texts.honestidad.content
-  statusIndicator.textContent = "Marcador detectado: " + texts.honestidad.title
-  document.querySelector("#honestidad-model").setAttribute("scale", "1 1 1")
-})
-
-document.querySelector("#marker-prudencia").addEventListener("markerFound", () => {
-  titleElement.innerText = texts.prudencia.title
-  textElement.innerText = texts.prudencia.content
-  statusIndicator.textContent = "Marcador detectado: " + texts.prudencia.title
-  document.querySelector("#prudencia-model").setAttribute("scale", "1 1 1")
-})
-
-document.querySelector("#marker-justicia").addEventListener("markerFound", () => {
-  titleElement.innerText = texts.justicia.title
-  textElement.innerText = texts.justicia.content
-  statusIndicator.textContent = "Marcador detectado: " + texts.justicia.title
-  document.querySelector("#justicia-model").setAttribute("scale", "1 1 1")
-})
-
-// Opción: Puedes hacer que desaparezca el texto cuando no haya marcador detectado
-document.querySelector("#marker-phoenix").addEventListener("markerLost", () => {
-  if (titleElement.innerText === texts.phoenix.title) {
-    titleElement.innerText = ""
-    textElement.innerText = ""
-    statusIndicator.textContent = "Buscando marcadores..."
-  }
-})
-
-document.querySelector("#marker-lion").addEventListener("markerLost", () => {
-  if (titleElement.innerText === texts.lion.title) {
-    titleElement.innerText = ""
-    textElement.innerText = ""
-    statusIndicator.textContent = "Buscando marcadores..."
-  }
-})
-
-document.querySelector("#marker-honestidad").addEventListener("markerLost", () => {
-  if (titleElement.innerText === texts.honestidad.title) {
-    titleElement.innerText = ""
-    textElement.innerText = ""
-    statusIndicator.textContent = "Buscando marcadores..."
-  }
-})
-
-document.querySelector("#marker-prudencia").addEventListener("markerLost", () => {
-  if (titleElement.innerText === texts.prudencia.title) {
-    titleElement.innerText = ""
-    textElement.innerText = ""
-    statusIndicator.textContent = "Buscando marcadores..."
-  }
-})
-
-document.querySelector("#marker-justicia").addEventListener("markerLost", () => {
-  if (titleElement.innerText === texts.justicia.title) {
-    titleElement.innerText = ""
-    textElement.innerText = ""
-    statusIndicator.textContent = "Buscando marcadores..."
-  }
-})
-
-// Función de texto a voz
-speakBtn.addEventListener("click", () => {
-  if (isSpeaking) {
-    synth.cancel()
-    isSpeaking = false
-    speakBtn.innerText = "Reproducir Texto"
+  if (show) {
+    updateStatus("Cargando modelos...")
   } else {
-    const utterance = new SpeechSynthesisUtterance(textElement.innerText)
-    utterance.lang = "es-ES"
-    utterance.rate = 1.0
-    utterance.pitch = 1.0
-
-    utterance.onstart = () => {
-      isSpeaking = true
-      speakBtn.innerText = "Detener Reproducción"
-    }
-
-    utterance.onend = () => {
-      isSpeaking = false
-      speakBtn.innerText = "Reproducir Texto"
-    }
-
-    synth.speak(utterance)
+    updateStatus("Buscando marcadores...")
   }
+}
+
+// Función para actualizar el contenido del panel de información
+function updateInfoPanel(markerType) {
+  if (!texts[markerType]) return
+
+  const { title, content } = texts[markerType]
+  titleElement.innerText = title
+  textElement.innerText = content
+
+  // Añadir animación de aparición
+  infoBox.classList.add("fade-in")
+  setTimeout(() => infoBox.classList.remove("fade-in"), 500)
+
+  // Actualizar estado
+  updateStatus(`Marcador detectado: ${title}`)
+
+  // Detener cualquier reproducción de voz en curso
+  if (isSpeaking) {
+    stopSpeaking()
+  }
+}
+
+// Función para limpiar el panel de información
+function clearInfoPanel() {
+  titleElement.innerText = ""
+  textElement.innerText = ""
+  updateStatus("Buscando marcadores...")
+}
+
+// Función para iniciar la reproducción de voz
+function startSpeaking() {
+  if (isSpeaking || !textElement.innerText) return
+
+  const utterance = new SpeechSynthesisUtterance(textElement.innerText)
+  utterance.lang = "es-ES"
+  utterance.rate = 1.0
+  utterance.pitch = 1.0
+
+  utterance.onstart = () => {
+    isSpeaking = true
+    speakBtn.innerHTML = '<span id="speak-icon">🔇</span> <span id="speak-text">Detener Reproducción</span>'
+    speakBtn.classList.add("speaking")
+  }
+
+  utterance.onend = () => {
+    stopSpeaking()
+  }
+
+  utterance.onerror = (event) => {
+    console.error("Error de síntesis de voz:", event)
+    stopSpeaking()
+  }
+
+  synth.speak(utterance)
+}
+
+// Función para detener la reproducción de voz
+function stopSpeaking() {
+  synth.cancel()
+  isSpeaking = false
+  speakBtn.innerHTML = '<span id="speak-icon">🔊</span> <span id="speak-text">Reproducir Texto</span>'
+  speakBtn.classList.remove("speaking")
+}
+
+// Función para alternar la reproducción de voz
+function toggleSpeech() {
+  if (isSpeaking) {
+    stopSpeaking()
+  } else {
+    startSpeaking()
+  }
+}
+
+// Inicialización de la escena
+document.addEventListener("DOMContentLoaded", () => {
+  const scene = document.querySelector("a-scene")
+
+  // Evento de carga de la escena
+  scene.addEventListener("loaded", () => {
+    toggleLoading(false)
+    console.log("Escena AR cargada correctamente")
+
+    // Asegurarse de que los elementos de la interfaz sean visibles
+    document.getElementById("back-button").style.display = "flex"
+    document.getElementById("status-indicator").style.display = "block"
+  })
+
+  // Evento de error de carga
+  scene.addEventListener("error", (event) => {
+    console.error("Error al cargar la escena AR:", event)
+    updateStatus("Error al cargar la escena")
+  })
+
+  // Ajustar altura del contenedor de modelo según la orientación
+  adjustContainerHeights()
 })
 
-// Ajustar el tamaño de la cámara cuando la página se carga
-window.addEventListener("load", () => {
-  // Dar tiempo a que AR.js inicialice
-  setTimeout(() => {
-    const arCanvas = document.querySelector(".a-canvas")
-    if (arCanvas) {
-      arCanvas.style.width = "100%"
-      arCanvas.style.height = "100%"
-      arCanvas.style.objectFit = "cover"
-      arCanvas.style.position = "absolute"
-      arCanvas.style.top = "0"
-      arCanvas.style.left = "0"
-      console.log("Canvas ajustado")
-    }
-  }, 1000)
-})
+// Función para ajustar las alturas de los contenedores
+function adjustContainerHeights() {
+  const isLandscape = window.innerWidth > window.innerHeight
 
-// Detectar si es un dispositivo móvil
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-if (isMobile) {
-  // Prevenir zoom en iOS
-  document.addEventListener("gesturestart", (e) => {
-    e.preventDefault()
+  if (isLandscape) {
+    modelContainer.style.minHeight = "60%"
+    modelContainer.style.maxHeight = "70%"
+    infoBox.style.minHeight = "30%"
+    infoBox.style.maxHeight = "40%"
+  } else {
+    modelContainer.style.minHeight = "50%"
+    modelContainer.style.maxHeight = "60%"
+    infoBox.style.minHeight = "40%"
+    infoBox.style.maxHeight = "50%"
+  }
+}
+
+// Gestión de eventos de marcadores
+function setupMarkerEvents() {
+  // Configurar eventos para cada marcador
+  const markers = [
+    { id: "marker-phoenix", type: "phoenix" },
+    { id: "marker-lion", type: "lion" },
+    { id: "marker-honestidad", type: "honestidad" },
+    { id: "marker-prudencia", type: "prudencia" },
+    { id: "marker-justicia", type: "justicia" },
+  ]
+
+  markers.forEach(({ id, type }) => {
+    const marker = document.getElementById(id)
+
+    marker.addEventListener("markerFound", () => {
+      markerVisible = true
+      currentMarker = type
+      updateInfoPanel(type)
+    })
+
+    marker.addEventListener("markerLost", () => {
+      if (currentMarker === type) {
+        markerVisible = false
+        currentMarker = null
+        clearInfoPanel()
+      }
+    })
   })
 }
+
+// Configurar eventos de botón de voz
+speakBtn.addEventListener("click", toggleSpeech)
+
+// Configurar eventos de teclas
+document.addEventListener("keydown", (event) => {
+  // Tecla Espacio para reproducir/detener voz
+  if (event.code === "Space" && textElement.innerText) {
+    event.preventDefault()
+    toggleSpeech()
+  }
+})
+
+// Inicializar eventos de marcadores cuando la escena esté lista
+window.addEventListener("load", () => {
+  setTimeout(setupMarkerEvents, 1000)
+
+  // Asegurarse de que los elementos de la interfaz sean visibles
+  document.getElementById("back-button").style.display = "flex"
+  document.getElementById("status-indicator").style.display = "block"
+})
+
+// Gestión de visibilidad de la página
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden && isSpeaking) {
+    stopSpeaking()
+  }
+})
+
+// Gestión de errores
+window.addEventListener("error", (event) => {
+  console.error("Error en la aplicación:", event.message)
+  updateStatus("Error en la aplicación")
+})
+
+// Optimización para dispositivos móviles
+function checkMobileDevice() {
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+  if (isMobile) {
+    // Ajustes específicos para móviles
+    document.body.classList.add("mobile-device")
+
+    // Prevenir zoom en iOS
+    document.addEventListener("gesturestart", (e) => {
+      e.preventDefault()
+    })
+
+    // Ajustar tamaños para móviles
+    adjustContainerHeights()
+  }
+}
+
+checkMobileDevice()
+
+// Gestión de orientación del dispositivo
+window.addEventListener("orientationchange", () => {
+  // Pequeña pausa para permitir que el navegador actualice las dimensiones
+  setTimeout(() => {
+    // Ajustar la altura del contenedor de información según la orientación
+    adjustContainerHeights()
+  }, 100)
+})
+
+// También ajustar en cambio de tamaño de ventana
+window.addEventListener("resize", adjustContainerHeights)
+
+// Inicializar altura personalizada
+const vh = window.innerHeight * 0.01
+document.documentElement.style.setProperty("--vh", `${vh}px`)
+
 
 
