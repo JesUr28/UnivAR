@@ -79,6 +79,10 @@ function updateInfoPanel(markerType) {
   if (isSpeaking) {
     stopSpeaking()
   }
+
+  // Asegurarse de que el panel de información sea visible y desplazable
+  infoBox.style.display = "block"
+  infoBox.scrollTop = 0
 }
 
 // Función para limpiar el panel de información
@@ -144,6 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Asegurarse de que los elementos de la interfaz sean visibles
     document.getElementById("back-button").style.display = "flex"
     document.getElementById("status-indicator").style.display = "block"
+
+    // Corregir el canvas de AR.js
+    fixARCanvas()
   })
 
   // Evento de error de carga
@@ -155,6 +162,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Ajustar altura del contenedor de modelo según la orientación
   adjustContainerHeights()
 })
+
+// Función para corregir el canvas de AR.js
+function fixARCanvas() {
+  setTimeout(() => {
+    const canvas = document.querySelector(".a-canvas")
+    if (canvas) {
+      canvas.style.width = "100%"
+      canvas.style.height = "100%"
+      canvas.style.left = "0"
+      canvas.style.top = "0"
+      canvas.style.position = "absolute"
+      canvas.style.objectFit = "cover"
+      canvas.style.transform = "none"
+    }
+  }, 1000)
+}
 
 // Función para ajustar las alturas de los contenedores
 function adjustContainerHeights() {
@@ -171,6 +194,9 @@ function adjustContainerHeights() {
     infoBox.style.minHeight = "40%"
     infoBox.style.maxHeight = "50%"
   }
+
+  // Corregir el canvas de AR.js
+  fixARCanvas()
 }
 
 // Gestión de eventos de marcadores
@@ -222,6 +248,9 @@ window.addEventListener("load", () => {
   // Asegurarse de que los elementos de la interfaz sean visibles
   document.getElementById("back-button").style.display = "flex"
   document.getElementById("status-indicator").style.display = "block"
+
+  // Corregir el canvas de AR.js
+  fixARCanvas()
 })
 
 // Gestión de visibilidad de la página
@@ -263,12 +292,36 @@ window.addEventListener("orientationchange", () => {
   setTimeout(() => {
     // Ajustar la altura del contenedor de información según la orientación
     adjustContainerHeights()
+
+    // Corregir el canvas de AR.js
+    fixARCanvas()
   }, 100)
 })
 
 // También ajustar en cambio de tamaño de ventana
-window.addEventListener("resize", adjustContainerHeights)
+window.addEventListener("resize", () => {
+  adjustContainerHeights()
+  fixARCanvas()
+})
 
 // Inicializar altura personalizada
 const vh = window.innerHeight * 0.01
 document.documentElement.style.setProperty("--vh", `${vh}px`)
+
+// Observador de mutaciones para corregir el canvas cuando cambie
+const observer = new MutationObserver((mutations) => {
+  fixARCanvas()
+})
+
+// Iniciar observación después de que la página esté cargada
+window.addEventListener("load", () => {
+  const sceneEl = document.querySelector("a-scene")
+  if (sceneEl) {
+    observer.observe(sceneEl, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    })
+  }
+})
+
